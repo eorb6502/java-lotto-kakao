@@ -180,4 +180,24 @@ public class LottoTest {
             generator.generate(0)
         );
     }
+
+    @Test
+    @DisplayName("로또 번호 생성 - seed 0이면 결과가 재현 가능")
+    public void test_generate_seed_zero_reproducible() {
+        LottoNumberGenerator firstGenerator = new LottoNumberGenerator(0L);
+        LottoNumberGenerator secondGenerator = new LottoNumberGenerator(0L);
+
+        for (int index = 0; index < 3; index++) {
+            List<Integer> firstGeneratedNumbers = firstGenerator.generate().getNumbers();
+            List<Integer> secondGeneratedNumbers = secondGenerator.generate().getNumbers();
+
+            assertEquals(firstGeneratedNumbers, secondGeneratedNumbers);
+            assertEquals(6, firstGeneratedNumbers.size());
+            assertEquals(6, new HashSet<>(firstGeneratedNumbers).size());
+            for (Integer generatedNumber : firstGeneratedNumbers) {
+                assertTrue(generatedNumber >= 1 && generatedNumber <= 45);
+            }
+        }
+    }
 }
+

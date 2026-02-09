@@ -13,11 +13,11 @@ public class LottoNumberGenerator {
     private final Random random;
 
     public LottoNumberGenerator() {
-        this(new Random());
+        this.random = new Random();
     }
 
-    public LottoNumberGenerator(Random random) {
-        this.random = random;
+    public LottoNumberGenerator(long seed) {
+        this.random = new Random(seed);
     }
 
     public LottoNumbers generate() {
