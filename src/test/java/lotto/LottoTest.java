@@ -1,12 +1,15 @@
 package lotto;
 
 import lotto.model.LottoNumbers;
+import lotto.model.LottoNumberGenerator;
 import lotto.model.LottoResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -140,6 +143,41 @@ public class LottoTest {
     public void test_compare_no_bonus() {
         assertThrows(IllegalArgumentException.class, () ->
             new LottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 0)
+        );
+    }
+
+    @Test
+    @DisplayName("로또 번호 생성 - 1~45 범위의 중복 없는 6개 숫자")
+    public void test_generate_single_lotto() {
+        LottoNumberGenerator generator = new LottoNumberGenerator();
+
+        LottoNumbers generatedLottoNumbers = generator.generate();
+        List<Integer> generatedNumbers = generatedLottoNumbers.getNumbers();
+
+        assertEquals(6, generatedNumbers.size());
+        assertEquals(6, new HashSet<>(generatedNumbers).size());
+        for (Integer generatedNumber : generatedNumbers) {
+            assertTrue(generatedNumber >= 1 && generatedNumber <= 45);
+        }
+    }
+
+    @Test
+    @DisplayName("로또 번호 생성 - 원하는 개수만큼 생성")
+    public void test_generate_multiple_lotto() {
+        LottoNumberGenerator generator = new LottoNumberGenerator();
+
+        List<LottoNumbers> generatedLottos = generator.generate(5);
+
+        assertEquals(5, generatedLottos.size());
+    }
+
+    @Test
+    @DisplayName("로또 번호 생성 - 생성 개수는 1 이상")
+    public void test_generate_invalid_count() {
+        LottoNumberGenerator generator = new LottoNumberGenerator();
+
+        assertThrows(IllegalArgumentException.class, () ->
+            generator.generate(0)
         );
     }
 }

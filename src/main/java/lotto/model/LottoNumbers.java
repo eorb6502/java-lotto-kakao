@@ -79,4 +79,7 @@ public class LottoNumbers {
         // 3개 -> 5등
     }
 
+    public String toString() {
+        return numbers.toString();
+    }
 }
