@@ -2,16 +2,19 @@ package lotto.view;
 
 import lotto.model.LottoNumbers;
 import lotto.model.LottoResult;
+import lotto.model.PurchaseResult;
 
 import java.util.List;
 import java.util.Map;
 
 public class OutputView {
-    public void printPurchasedLottos(List<LottoNumbers> purchasedLottos, int manualCount, int autoCount) {
-        System.out.println("수동으로 " + manualCount + "장, 자동으로 " + autoCount + "개를 구매했습니다.");
-        for (LottoNumbers purchasedLotto : purchasedLottos) {
+
+    public void printPurchasedLottos(final PurchaseResult result) {
+        System.out.println("수동으로 " + result.manualCount() + "장, 자동으로 " + result.autoCount() + "개를 구매했습니다.");
+        for (final LottoNumbers purchasedLotto : result.purchasedNumbers()) {
             System.out.println(purchasedLotto.getNumbers());
         }
+        System.out.println();
     }
 
     public void printStatistics(Map<LottoResult, Integer> resultCountByRank, double profitRate) {
