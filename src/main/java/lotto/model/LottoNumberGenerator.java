@@ -30,8 +30,8 @@ public class LottoNumberGenerator {
     }
 
     public List<LottoNumbers> generate(int count) {
-        if (count < 1) {
-            throw new IllegalArgumentException("생성 개수는 1 이상이어야 합니다.");
+        if (count < 0) {
+            throw new IllegalArgumentException("생성 개수는 0 이상이어야 합니다.");
         }
         List<LottoNumbers> generatedLottos = new ArrayList<>();
         for (int index = 0; index < count; index++) {
