@@ -34,49 +34,59 @@ public class LottoController {
 
     public void run() {
         // 구입 금액 입력
-        int price = inputPriceView.inputPrice();
+        int price = doInputPrice();
         int totalCount = price / LOTTO_PRICE;
 
-        PurchaseResult purchaseResult = purchaseLottos(totalCount);
-        outputView.printPurchasedLottos(purchaseResult);
-
-        LottoNumbers historyNumber = readWinningNumbers(inputHistoryView);
-        Map<LottoResult, Integer> resultCountByRank = countByRank(historyNumber, purchaseResult.purchasedNumbers());
-        outputView.printStatistics(resultCountByRank, calculateProfitRate(price, resultCountByRank));
-    }
-
-    private PurchaseResult purchaseLottos(int totalCount) {
-        int manualCount = inputManualView.inputManualCount(totalCount);
+        // 수동 개수 입력 & 자동 개수 계산
+        int manualCount = doInputManualCount(totalCount);
         int autoCount = totalCount - manualCount;
 
+        // 로또 구매 (수동은 번호 입력 & 자동은 번호 생성)
+        final PurchaseResult purchaseResult = doPurchase(manualCount, autoCount);
+        outputView.printPurchasedLottos(purchaseResult);
+
+        // 지난주 결과 입력
+        final LottoNumbers winningNumber = doInputWinningNumbers();
+
+        // 통계 계산 및 출력
+        Map<LottoResult, Integer> rank = countByRank(winningNumber, purchaseResult.purchasedNumbers());
+        double profitRate = (double)calculateTotalPrize(rank) / price;
+        outputView.printStatistics(rank, profitRate);
+    }
+
+    private int doInputPrice() {
+        return inputPriceView.inputPrice();
+    }
+
+    private int doInputManualCount(int maxCount) {
+        return inputManualView.inputManualCount(maxCount);
+    }
+
+    private PurchaseResult doPurchase(int manualCount, int autoCount) {
         List<LottoNumbers> purchasedNumbers = inputManualView.inputManualLottos(manualCount);
         List<LottoNumbers> autoNumbers = lottoGenerator.generate(autoCount);
         purchasedNumbers.addAll(autoNumbers);
         return new PurchaseResult(purchasedNumbers, manualCount, autoCount);
     }
 
-    private LottoNumbers readWinningNumbers(InputHistoryView historyInputView) {
-        List<Integer> num = historyInputView.inputWinningNumbers();
-        int bonusNum = historyInputView.inputBonusNumber(num);
-        return new LottoNumbers(num, bonusNum);
+    private LottoNumbers doInputWinningNumbers() {
+        List<Integer> numbers = inputHistoryView.inputWinningNumbers();
+        int bonusNumber = inputHistoryView.inputBonusNumber(numbers);
+        return new LottoNumbers(numbers, bonusNumber);
     }
 
-    private Map<LottoResult, Integer> countByRank(LottoNumbers historyNumber, List<LottoNumbers> generatedNumbers) {
-        Map<LottoResult, Integer> resultCountByRank = new HashMap<>();
-        for (LottoNumbers numbers : generatedNumbers) {
-            LottoResult result = historyNumber.compare(numbers);
-            resultCountByRank.merge(result, 1, Integer::sum);
+    private Map<LottoResult, Integer> countByRank(LottoNumbers winningNumber, List<LottoNumbers> purchasedNumbers) {
+        Map<LottoResult, Integer> rank = new HashMap<>();
+        for (LottoNumbers numbers : purchasedNumbers) {
+            final LottoResult result = winningNumber.compare(numbers);
+            rank.merge(result, 1, Integer::sum);
         }
-        return resultCountByRank;
+        return rank;
     }
 
-    private double calculateProfitRate(int price, Map<LottoResult, Integer> resultCountByRank) {
-        return (double)calculateTotalPrize(resultCountByRank) / price;
-    }
-
-    private long calculateTotalPrize(Map<LottoResult, Integer> resultCountByRank) {
+    private long calculateTotalPrize(Map<LottoResult, Integer> rank) {
         long totalPrize = 0L;
-        for (Map.Entry<LottoResult, Integer> entry : resultCountByRank.entrySet()) {
+        for (Map.Entry<LottoResult, Integer> entry : rank.entrySet()) {
             totalPrize += entry.getKey().getPrize() * entry.getValue();
         }
         return totalPrize;

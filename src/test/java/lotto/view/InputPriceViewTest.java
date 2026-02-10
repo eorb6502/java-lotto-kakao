@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class InputViewTest {
+class InputPriceViewTest {
     private InputStream originalIn;
 
     @BeforeEach
@@ -29,7 +29,7 @@ class InputViewTest {
     void test_input_price_retries_on_invalid_input() {
         setInput("abc\n1000\n");
 
-        InputPriceView inputView = new InputPriceView();
+        InputPriceView inputView = new InputPriceView(1000);
         int price = inputView.inputPrice();
 
         assertEquals(1000, price);
@@ -40,7 +40,7 @@ class InputViewTest {
     void test_input_price_minimum() {
         setInput("999\n1000\n");
 
-        InputPriceView inputView = new InputPriceView();
+        InputPriceView inputView = new InputPriceView(1000);
         int price = inputView.inputPrice();
 
         assertEquals(1000, price);

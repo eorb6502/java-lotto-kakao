@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class HistoryInputViewTest {
+class InputHistoryViewTest {
     private InputStream originalIn;
 
     @BeforeEach
@@ -23,6 +23,11 @@ class HistoryInputViewTest {
     @AfterEach
     void tearDown() {
         System.setIn(originalIn);
+    }
+
+    private void setInput(String data) {
+        System.setIn(new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_8)));
+        System.out.print(data);
     }
 
     @Test
@@ -78,9 +83,5 @@ class HistoryInputViewTest {
         List<Integer> winningNumbers = inputView.inputWinningNumbers();
 
         assertEquals(List.of(1, 2, 3, 4, 5, 6), winningNumbers);
-    }
-
-    private void setInput(String data) {
-        System.setIn(new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_8)));
     }
 }
