@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ManualLottoInputView {
+public class InputManualView {
     private static final String DIGITS_ONLY_REGEX = "\\d+";
     private static final String LOTTO_INPUT_REGEX = "^\\d+(?:\\s*,\\s*\\d+)*$";
     private static final int LOTTO_NUMBER_COUNT = 6;
@@ -17,7 +17,7 @@ public class ManualLottoInputView {
 
     private final Scanner scanner;
 
-    public ManualLottoInputView() {
+    public InputManualView() {
         this.scanner = new Scanner(System.in);
     }
 

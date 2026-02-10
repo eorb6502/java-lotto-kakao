@@ -69,13 +69,10 @@ public class LottoNumbers {
     }
 
     private int calculateIntersectionSize(List<Integer> otherNumbers) {
-        int count = 0;
-        for (final LottoNumber number : numbers) {
-            if (otherNumbers.contains(number.value())) {
-                count++;
-            }
-        }
-        return count;
+        return (int) numbers.stream()
+            .map(LottoNumber::value)
+            .filter(otherNumbers::contains)
+            .count();
     }
 
     private LottoResult determineResult(int matchCount, boolean bonusMatched) {
