@@ -7,8 +7,6 @@ import java.util.Random;
 
 public class LottoNumberGenerator {
     private static final int LOTTO_SIZE = 6;
-    private static final int LOTTO_MIN_NUMBER = 1;
-    private static final int LOTTO_MAX_NUMBER = 45;
 
     private final Random random;
 
@@ -23,7 +21,7 @@ public class LottoNumberGenerator {
     public LottoNumbers generate() {
         // 1 ~ 45 숫자 리스트를 생성하고 랜덤하게 섞기
         final List<Integer> candidates = new ArrayList<>();
-        for (int number = LOTTO_MIN_NUMBER; number <= LOTTO_MAX_NUMBER; number++) {
+        for (int number = LottoNumber.MIN_NUMBER; number <= LottoNumber.MAX_NUMBER; number++) {
             candidates.add(number);
         }
         Collections.shuffle(candidates, random);

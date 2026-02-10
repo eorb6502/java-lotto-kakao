@@ -12,87 +12,79 @@ public class LottoNumbers {
     private final LottoNumber bonusNumber;
 
     public LottoNumbers(List<Integer> numbers) {
-        this(convertNumbers(numbers), null, false);
+        this(convertNumbers(numbers), null);
     }
 
     public LottoNumbers(List<Integer> numbers, Integer bonusNumber) {
-        this(convertNumbers(numbers), new LottoNumber(bonusNumber), true);
+        this(convertNumbers(numbers), new LottoNumber(bonusNumber));
     }
 
-    private LottoNumbers(List<LottoNumber> numbers, LottoNumber bonusNumber, boolean checkBonus) {
+    private LottoNumbers(List<LottoNumber> numbers, LottoNumber bonusNumber) {
+        // 숫자 개수 검증
         if (numbers.size() != LOTTO_SIZE) {
-            throw new IllegalArgumentException("숫자는 6개이어야 합니다.");
+            throw new IllegalArgumentException("로또 번호는 6개의 숫자이어야 합니다.");
         }
-        if (checkBonus && bonusNumber == null) {
-            throw new IllegalArgumentException("보너스 숫자의 범위는 1 이상 45 이하이어야 합니다.");
+        // 숫자 중복 검증
+        final Set<Integer> set = new HashSet<>();
+        for (final LottoNumber number : numbers) {
+            set.add(number.value());
         }
-        validateNoDuplicates(numbers);
+        if (set.size() != LOTTO_SIZE) {
+            throw new IllegalArgumentException("로또 번호는 중복될 수 없습니다.");
+        }
+        // 보너스 번호 중복 검증
+        if (bonusNumber != null && set.contains(bonusNumber.value())) {
+            throw new IllegalArgumentException("보너스 번호는 중복될 수 없습니다.");
+        }
         this.numbers = numbers;
         this.bonusNumber = bonusNumber;
     }
 
     public List<Integer> getNumbers() {
-        return toIntegerList(numbers);
+        List<Integer> list = new ArrayList<>();
+        for (final LottoNumber number : numbers) {
+            list.add(number.value());
+        }
+        return list;
     }
 
-    public Integer getBonus() {
-        if (bonusNumber == null) {
-            return 0;
-        }
-        return bonusNumber.getValue();
+    public int getBonus() {
+        if (bonusNumber == null) return 0;
+        return bonusNumber.value();
     }
 
     public LottoResult compare(LottoNumbers other) {
         if ((this.bonusNumber == null && other.bonusNumber == null) ||
             (this.bonusNumber != null && other.bonusNumber != null)) {
-            throw new IllegalArgumentException("두 로또 번호 조합 중 반드시 한 개의 로또 번호에만 보너스 번호가 있어야 합니다.");
+            throw new IllegalArgumentException("두 로또 번호 중 한 개의 로또 번호에만 보너스 번호가 있어야 합니다.");
         }
         if (this.bonusNumber == null) {
             return other.compare(this);
         }
-        List<Integer> otherNumbers = other.getNumbers();
-        int intersectionSize = calculateIntersectionSize(otherNumbers);
-
-        if (intersectionSize == 6) {
-            return LottoResult.RANK_FIRST;
-        }
-        if (intersectionSize == 5 && otherNumbers.contains(this.bonusNumber.getValue())) {
-            return LottoResult.RANK_SECOND;
-        }
-        if (intersectionSize == 5) {
-            return LottoResult.RANK_THIRD;
-        }
-        if (intersectionSize == 4) {
-            return LottoResult.RANK_FOURTH;
-        }
-        if (intersectionSize == 3) {
-            return LottoResult.RANK_FIFTH;
-        }
-        return LottoResult.RANK_NONE;
-    }
-
-    public String toString() {
-        return getNumbers().toString();
+        // 두 로또 번호 비교
+        final List<Integer> otherNumbers = other.getNumbers();
+        int matchCount = calculateIntersectionSize(otherNumbers);
+        boolean isBonusMatched = otherNumbers.contains(bonusNumber.value());
+        return determineResult(matchCount, isBonusMatched);
     }
 
     private int calculateIntersectionSize(List<Integer> otherNumbers) {
         int count = 0;
-        for (LottoNumber number : numbers) {
-            if (otherNumbers.contains(number.getValue())) {
+        for (final LottoNumber number : numbers) {
+            if (otherNumbers.contains(number.value())) {
                 count++;
             }
         }
         return count;
     }
 
-    private static void validateNoDuplicates(List<LottoNumber> numbers) {
-        Set<Integer> set = new HashSet<>();
-        for (LottoNumber number : numbers) {
-            set.add(number.getValue());
-        }
-        if (set.size() != LOTTO_SIZE) {
-            throw new IllegalArgumentException("숫자는 중복될 수 없습니다.");
-        }
+    private LottoResult determineResult(int matchCount, boolean bonusMatched) {
+        if (matchCount == 6) return LottoResult.RANK_FIRST;
+        if (matchCount == 5 && bonusMatched) return LottoResult.RANK_SECOND;
+        if (matchCount == 5) return LottoResult.RANK_THIRD;
+        if (matchCount == 4) return LottoResult.RANK_FOURTH;
+        if (matchCount == 3) return LottoResult.RANK_FIFTH;
+        return LottoResult.RANK_NONE;
     }
 
     private static List<LottoNumber> convertNumbers(List<Integer> numbers) {
@@ -103,11 +95,7 @@ public class LottoNumbers {
         return lottoNumbers;
     }
 
-    private static List<Integer> toIntegerList(List<LottoNumber> numbers) {
-        List<Integer> values = new ArrayList<>();
-        for (LottoNumber number : numbers) {
-            values.add(number.getValue());
-        }
-        return values;
+    public String toString() {
+        return getNumbers().toString();
     }
 }
