@@ -14,15 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AppProfitRateTest {
     private static final int LOTTO_PRICE = 1000;
-    private static final Map<LottoResult, Long> PRIZE_BY_RESULT = Map.of(
-        LottoResult.RANK_FIRST, 2_000_000_000L,
-        LottoResult.RANK_SECOND, 30_000_000L,
-        LottoResult.RANK_THIRD, 1_500_000L,
-        LottoResult.RANK_FOURTH, 50_000L,
-        LottoResult.RANK_FIFTH, 5_000L,
-        LottoResult.RANK_NONE, 0L
-    );
-
     @Test
     @DisplayName("seed 0 기반 생성 결과에서 수익률 계산이 dot 연산과 일치")
     void test_profit_rate_with_seed_zero() throws Exception {
@@ -31,7 +22,7 @@ class AppProfitRateTest {
 
         LottoNumberGenerator generator = new LottoNumberGenerator(0L);
         List<LottoNumbers> generatedNumbers = generator.generate(ticketCount);
-        LottoNumbers winningNumbers = createWinningNumbers(generatedNumbers.getFirst());
+        LottoNumbers winningNumbers = createWinningNumbers(generatedNumbers.get(0));
 
         Map<LottoResult, Integer> resultCountByRank = invokeCountByRank(winningNumbers, generatedNumbers);
 
@@ -48,14 +39,14 @@ class AppProfitRateTest {
     @SuppressWarnings("unchecked")
     private Map<LottoResult, Integer> invokeCountByRank(LottoNumbers winningNumbers, List<LottoNumbers> generatedNumbers)
         throws Exception {
-        Method method = App.class.getDeclaredMethod("countByRank", LottoNumbers.class, List.class);
+        Method method = LottoController.class.getDeclaredMethod("countByRank", LottoNumbers.class, List.class);
         method.setAccessible(true);
         return (Map<LottoResult, Integer>) method.invoke(null, winningNumbers, generatedNumbers);
     }
 
     private double invokeCalculateProfitRate(int price, Map<LottoResult, Integer> resultCountByRank)
         throws Exception {
-        Method method = App.class.getDeclaredMethod("calculateProfitRate", int.class, Map.class);
+        Method method = LottoController.class.getDeclaredMethod("calculateProfitRate", int.class, Map.class);
         method.setAccessible(true);
         return (double) method.invoke(null, price, resultCountByRank);
     }
@@ -78,8 +69,7 @@ class AppProfitRateTest {
     private double calculateExpectedProfitRate(int price, Map<LottoResult, Integer> resultCountByRank) {
         long totalPrize = 0L;
         for (Map.Entry<LottoResult, Integer> entry : resultCountByRank.entrySet()) {
-            long prize = PRIZE_BY_RESULT.getOrDefault(entry.getKey(), 0L);
-            totalPrize += prize * entry.getValue();
+            totalPrize += entry.getKey().getPrize() * entry.getValue();
         }
         return (double) totalPrize / price;
     }

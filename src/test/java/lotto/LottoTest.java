@@ -172,13 +172,12 @@ public class LottoTest {
     }
 
     @Test
-    @DisplayName("로또 번호 생성 - 생성 개수는 1 이상")
-    public void test_generate_invalid_count() {
+    @DisplayName("로또 번호 생성 - 0개는 빈 목록")
+    public void test_generate_zero_count() {
         LottoNumberGenerator generator = new LottoNumberGenerator();
 
-        assertThrows(IllegalArgumentException.class, () ->
-            generator.generate(0)
-        );
+        List<LottoNumbers> generatedLottos = generator.generate(0);
+        assertEquals(0, generatedLottos.size());
     }
 
     @Test
@@ -200,4 +199,3 @@ public class LottoTest {
         }
     }
 }
-
