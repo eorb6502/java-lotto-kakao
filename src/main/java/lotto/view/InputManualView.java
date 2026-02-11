@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class InputManualView {
     private static final String DIGITS_ONLY_REGEX = "\\d+";
     private static final String LOTTO_INPUT_REGEX = "^\\d+(?:\\s*,\\s*\\d+)*$";
+    private static final String LOTTO_NUMBER_DELIMITER = ",";
     private static final int LOTTO_NUMBER_COUNT = 6;
 
     private final Scanner scanner;
@@ -78,7 +79,7 @@ public class InputManualView {
     }
 
     private List<Integer> parseLottoNumbers(String lottoInput) {
-        String[] tokens = lottoInput.split(",");
+        String[] tokens = lottoInput.split(LOTTO_NUMBER_DELIMITER);
         if (tokens.length != LOTTO_NUMBER_COUNT) {
             throw new IllegalArgumentException("로또 번호는 6개를 입력해야 합니다.");
         }
