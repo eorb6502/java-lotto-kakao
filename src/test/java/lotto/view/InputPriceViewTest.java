@@ -46,6 +46,17 @@ class InputPriceViewTest {
         assertEquals(1000, price);
     }
 
+    @Test
+    @DisplayName("구입금액이 1000원보다 작으면 재입력해야 한다")
+    void test_input_price_retries_when_less_than_1000() {
+        setInput("0\n999\n1000\n");
+
+        InputPriceView inputView = new InputPriceView(1000);
+        int price = inputView.inputPrice();
+
+        assertEquals(1000, price);
+    }
+
     private void setInput(String data) {
         System.setIn(new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_8)));
     }
