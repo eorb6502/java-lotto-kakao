@@ -26,15 +26,12 @@ public class LottoNumbers {
             throw new IllegalArgumentException("로또 번호는 6개의 숫자이어야 합니다.");
         }
         // 숫자 중복 검증
-        final Set<Integer> set = new HashSet<>();
-        for (final LottoNumber number : numbers) {
-            set.add(number.value());
-        }
+        final Set<LottoNumber> set = new HashSet<>(numbers);
         if (set.size() != LOTTO_SIZE) {
             throw new IllegalArgumentException("로또 번호는 중복될 수 없습니다.");
         }
         // 보너스 번호 중복 검증
-        if (bonusNumber != null && set.contains(bonusNumber.value())) {
+        if (bonusNumber != null && set.contains(bonusNumber)) {
             throw new IllegalArgumentException("보너스 번호는 중복될 수 없습니다.");
         }
         this.numbers = sortNumbers(numbers);
