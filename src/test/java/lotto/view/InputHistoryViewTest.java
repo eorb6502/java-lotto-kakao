@@ -47,18 +47,18 @@ class InputHistoryViewTest {
         setInput("abc\n7\n");
 
         InputHistoryView inputView = new InputHistoryView();
-        int bonusNumber = inputView.inputBonusNumber(List.of(1, 2, 3, 4, 5, 6));
+        int bonusNumber = inputView.inputBonusNumber();
 
         assertEquals(7, bonusNumber);
     }
 
     @Test
-    @DisplayName("보너스 번호는 당첨 번호와 중복될 수 없음")
-    void test_input_bonus_number_retries_on_duplicate() {
-        setInput("6\n7\n");
+    @DisplayName("보너스 번호가 범위를 벗어나면 재시도")
+    void test_input_bonus_number_retries_on_out_of_range() {
+        setInput("46\n7\n");
 
         InputHistoryView inputView = new InputHistoryView();
-        int bonusNumber = inputView.inputBonusNumber(List.of(1, 2, 3, 4, 5, 6));
+        int bonusNumber = inputView.inputBonusNumber();
 
         assertEquals(7, bonusNumber);
     }

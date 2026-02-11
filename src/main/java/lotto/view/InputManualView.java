@@ -1,7 +1,7 @@
 package lotto.view;
 
-import lotto.model.LottoNumbers;
 import lotto.model.ManualPurchaseCount;
+import lotto.model.PurchasedLottoNumbers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +32,8 @@ public class InputManualView {
         return inputManualCount(maxCount);
     }
 
-    public List<LottoNumbers> inputManualLottos(int manualCount) {
-        List<LottoNumbers> manualLottos = new ArrayList<>();
+    public List<PurchasedLottoNumbers> inputManualLottos(int manualCount) {
+        List<PurchasedLottoNumbers> manualLottos = new ArrayList<>();
         if (manualCount == 0) {
             return manualLottos;
         }
@@ -44,12 +44,12 @@ public class InputManualView {
         return manualLottos;
     }
 
-    private LottoNumbers inputSingleLotto() {
+    private PurchasedLottoNumbers inputSingleLotto() {
         try {
             String lottoInput = scanner.nextLine();
             validateLottoInputFormat(lottoInput);
             List<Integer> numbers = parseLottoNumbers(lottoInput);
-            return new LottoNumbers(numbers);
+            return new PurchasedLottoNumbers(numbers);
         } catch (IllegalArgumentException exception) {
             System.out.println(exception.getMessage());
         }

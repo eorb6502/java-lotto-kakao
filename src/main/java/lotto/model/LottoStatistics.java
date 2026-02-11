@@ -12,7 +12,7 @@ public record LottoStatistics(
         resultCountByRank = Map.copyOf(resultCountByRank);
     }
 
-    public static LottoStatistics from(LottoNumbers winningNumber, List<LottoNumbers> purchasedNumbers, int purchasePrice) {
+    public static LottoStatistics from(WinningLottoNumbers winningNumber, List<PurchasedLottoNumbers> purchasedNumbers, int purchasePrice) {
         PurchaseAmount amount = new PurchaseAmount(purchasePrice);
         Map<LottoResult, Integer> resultCountByRank = countByRank(winningNumber, purchasedNumbers);
         long totalPrize = calculateTotalPrize(resultCountByRank);
@@ -20,9 +20,9 @@ public record LottoStatistics(
         return new LottoStatistics(resultCountByRank, profitRate);
     }
 
-    private static Map<LottoResult, Integer> countByRank(LottoNumbers winningNumber, List<LottoNumbers> purchasedNumbers) {
+    private static Map<LottoResult, Integer> countByRank(WinningLottoNumbers winningNumber, List<PurchasedLottoNumbers> purchasedNumbers) {
         Map<LottoResult, Integer> resultCountByRank = new HashMap<>();
-        for (LottoNumbers numbers : purchasedNumbers) {
+        for (PurchasedLottoNumbers numbers : purchasedNumbers) {
             LottoResult result = winningNumber.compare(numbers);
             resultCountByRank.merge(result, 1, Integer::sum);
         }

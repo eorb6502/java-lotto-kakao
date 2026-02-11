@@ -12,14 +12,14 @@ class LottoStatisticsTest {
     @Test
     @DisplayName("당첨 결과 집계와 수익률을 계산한다")
     void test_create_statistics() {
-        LottoNumbers winningNumber = new LottoNumbers(List.of(1, 2, 3, 4, 5, 6), 7);
-        List<LottoNumbers> purchasedNumbers = List.of(
-            new LottoNumbers(List.of(1, 2, 3, 4, 5, 6)),
-            new LottoNumbers(List.of(1, 2, 3, 4, 5, 7)),
-            new LottoNumbers(List.of(1, 2, 3, 4, 5, 8)),
-            new LottoNumbers(List.of(1, 2, 3, 4, 9, 10)),
-            new LottoNumbers(List.of(1, 2, 3, 11, 12, 13)),
-            new LottoNumbers(List.of(8, 9, 10, 11, 12, 13))
+        WinningLottoNumbers winningNumber = new WinningLottoNumbers(List.of(1, 2, 3, 4, 5, 6), 7);
+        List<PurchasedLottoNumbers> purchasedNumbers = List.of(
+            new PurchasedLottoNumbers(List.of(1, 2, 3, 4, 5, 6)),
+            new PurchasedLottoNumbers(List.of(1, 2, 3, 4, 5, 7)),
+            new PurchasedLottoNumbers(List.of(1, 2, 3, 4, 5, 8)),
+            new PurchasedLottoNumbers(List.of(1, 2, 3, 4, 9, 10)),
+            new PurchasedLottoNumbers(List.of(1, 2, 3, 11, 12, 13)),
+            new PurchasedLottoNumbers(List.of(8, 9, 10, 11, 12, 13))
         );
 
         LottoStatistics statistics = LottoStatistics.from(winningNumber, purchasedNumbers, 6000);

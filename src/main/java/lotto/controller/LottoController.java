@@ -1,11 +1,12 @@
 package lotto.controller;
 
 import lotto.model.LottoNumberGenerator;
-import lotto.model.LottoNumbers;
 import lotto.model.LottoStatistics;
 import lotto.model.ManualPurchaseCount;
 import lotto.model.PurchaseAmount;
+import lotto.model.PurchasedLottoNumbers;
 import lotto.model.PurchaseResult;
+import lotto.model.WinningLottoNumbers;
 import lotto.view.InputHistoryView;
 import lotto.view.InputPriceView;
 import lotto.view.InputManualView;
@@ -43,7 +44,7 @@ public class LottoController {
         outputView.printPurchasedLottos(purchaseResult);
 
         // 지난주 결과 입력
-        final LottoNumbers winningNumber = doInputWinningNumbers();
+        final WinningLottoNumbers winningNumber = doInputWinningNumbers();
 
         // 통계 계산 및 출력
         LottoStatistics statistics = LottoStatistics.from(
@@ -63,15 +64,20 @@ public class LottoController {
     }
 
     private PurchaseResult doPurchase(int manualCount, int autoCount) {
-        List<LottoNumbers> purchasedNumbers = inputManualView.inputManualLottos(manualCount);
-        List<LottoNumbers> autoNumbers = lottoGenerator.generate(autoCount);
+        List<PurchasedLottoNumbers> purchasedNumbers = inputManualView.inputManualLottos(manualCount);
+        List<PurchasedLottoNumbers> autoNumbers = lottoGenerator.generate(autoCount);
         purchasedNumbers.addAll(autoNumbers);
         return new PurchaseResult(purchasedNumbers, manualCount, autoCount);
     }
 
-    private LottoNumbers doInputWinningNumbers() {
+    private WinningLottoNumbers doInputWinningNumbers() {
         List<Integer> numbers = inputHistoryView.inputWinningNumbers();
-        int bonusNumber = inputHistoryView.inputBonusNumber(numbers);
-        return new LottoNumbers(numbers, bonusNumber);
+        int bonusNumber = inputHistoryView.inputBonusNumber();
+        try {
+            return new WinningLottoNumbers(numbers, bonusNumber);
+        } catch (IllegalArgumentException exception) {
+            System.out.println(exception.getMessage());
+        }
+        return doInputWinningNumbers();
     }
 }

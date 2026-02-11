@@ -18,7 +18,7 @@ public class LottoNumberGenerator {
         this.random = new Random(seed);
     }
 
-    public LottoNumbers generate() {
+    public PurchasedLottoNumbers generate() {
         // 1 ~ 45 숫자 리스트를 생성하고 랜덤하게 섞기
         final List<Integer> candidates = new ArrayList<>();
         for (int number = LottoNumber.MIN_NUMBER; number <= LottoNumber.MAX_NUMBER; number++) {
@@ -29,14 +29,14 @@ public class LottoNumberGenerator {
         // 랜덤한 리스트의 앞 6개 숫자를 추출하고 정렬
         List<Integer> generated = new ArrayList<>(candidates.subList(0, LOTTO_SIZE));
         Collections.sort(generated);
-        return new LottoNumbers(generated);
+        return new PurchasedLottoNumbers(generated);
     }
 
-    public List<LottoNumbers> generate(int count) {
+    public List<PurchasedLottoNumbers> generate(int count) {
         if (count < 0) {
             throw new IllegalArgumentException("생성 개수는 0 이상이어야 합니다.");
         }
-        List<LottoNumbers> list = new ArrayList<>();
+        List<PurchasedLottoNumbers> list = new ArrayList<>();
         for (int index = 0; index < count; index++) {
             list.add(generate());
         }

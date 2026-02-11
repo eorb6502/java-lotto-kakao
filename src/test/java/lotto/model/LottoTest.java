@@ -69,78 +69,80 @@ public class LottoTest {
     }
 
     @Test
-    @DisplayName("보너스 번호를 포함한 생성자")
-    public void test_bonus() {
-        LottoNumbers nums = new LottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
-        assertEquals(7, nums.getBonus());
+    @DisplayName("당첨 번호는 보너스 번호를 가진다")
+    public void test_winning_numbers_bonus() {
+        WinningLottoNumbers winningNumbers = new WinningLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
+        assertEquals(7, winningNumbers.getBonus());
     }
 
     @Test
-    @DisplayName("보너스 번호가 없는 생성자")
-    public void test_no_bonus() {
-        LottoNumbers nums = new LottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6));
-        assertEquals(0, nums.getBonus());
+    @DisplayName("당첨 번호의 보너스 번호는 당첨 번호와 중복될 수 없음")
+    public void test_winning_bonus_duplicate() {
+        assertThrows(IllegalArgumentException.class, () ->
+            new WinningLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 6)
+        );
     }
 
     @Test
     @DisplayName("보너스 번호의 범위는 1부터 45까지 이어야 함")
     public void test_bonus_range() {
         assertThrows(IllegalArgumentException.class, () ->
-            new LottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 0)
+            new WinningLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 0)
         );
     }
 
     @Test
     @DisplayName("비교 - 6개 일치하는 경우 1등")
     public void test_compare_6() {
-        LottoNumbers nums1 = new LottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6));
-        LottoNumbers nums2 = new LottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
-        LottoResult result = nums1.compare(nums2);
+        PurchasedLottoNumbers purchased = new PurchasedLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6));
+        WinningLottoNumbers winning = new WinningLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
+        LottoResult result = winning.compare(purchased);
         assertEquals(LottoResult.RANK_FIRST, result);
     }
 
     @Test
     @DisplayName("비교 - 5개 일치 + 보너스 일치하는 경우 2등")
     public void test_compare_5_bonus() {
-        LottoNumbers nums1 = new LottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 7));
-        LottoNumbers nums2 = new LottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
-        LottoResult result = nums1.compare(nums2);
+        PurchasedLottoNumbers purchased = new PurchasedLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 7));
+        WinningLottoNumbers winning = new WinningLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
+        LottoResult result = winning.compare(purchased);
         assertEquals(LottoResult.RANK_SECOND, result);
     }
 
     @Test
     @DisplayName("비교 - 5개 일치하는 경우 3등")
     public void test_compare_5() {
-        LottoNumbers nums1 = new LottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 8));
-        LottoNumbers nums2 = new LottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
-        LottoResult result = nums1.compare(nums2);
+        PurchasedLottoNumbers purchased = new PurchasedLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 8));
+        WinningLottoNumbers winning = new WinningLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
+        LottoResult result = winning.compare(purchased);
         assertEquals(LottoResult.RANK_THIRD, result);
     }
 
     @Test
     @DisplayName("비교 - 4개 일치하는 경우 4등")
     public void test_compare_4() {
-        LottoNumbers nums1 = new LottoNumbers(Arrays.asList(1, 2, 3, 4, 8, 9));
-        LottoNumbers nums2 = new LottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
-        LottoResult result = nums1.compare(nums2);
+        PurchasedLottoNumbers purchased = new PurchasedLottoNumbers(Arrays.asList(1, 2, 3, 4, 8, 9));
+        WinningLottoNumbers winning = new WinningLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
+        LottoResult result = winning.compare(purchased);
         assertEquals(LottoResult.RANK_FOURTH, result);
     }
 
     @Test
     @DisplayName("비교 - 3개 일치하는 경우 5등")
     public void test_compare_3() {
-        LottoNumbers nums1 = new LottoNumbers(Arrays.asList(1, 2, 3, 8, 9, 10));
-        LottoNumbers nums2 = new LottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
-        LottoResult result = nums1.compare(nums2);
+        PurchasedLottoNumbers purchased = new PurchasedLottoNumbers(Arrays.asList(1, 2, 3, 8, 9, 10));
+        WinningLottoNumbers winning = new WinningLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
+        LottoResult result = winning.compare(purchased);
         assertEquals(LottoResult.RANK_FIFTH, result);
     }
 
     @Test
-    @DisplayName("보너스 번호")
-    public void test_compare_no_bonus() {
-        assertThrows(IllegalArgumentException.class, () ->
-            new LottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 0)
-        );
+    @DisplayName("비교 - 2개 이하 일치하면 낙첨")
+    public void test_compare_none() {
+        PurchasedLottoNumbers purchased = new PurchasedLottoNumbers(Arrays.asList(1, 2, 8, 9, 10, 11));
+        WinningLottoNumbers winning = new WinningLottoNumbers(Arrays.asList(1, 2, 3, 4, 5, 6), 7);
+        LottoResult result = winning.compare(purchased);
+        assertEquals(LottoResult.RANK_NONE, result);
     }
 
     @Test
@@ -148,7 +150,7 @@ public class LottoTest {
     public void test_generate_single_lotto() {
         LottoNumberGenerator generator = new LottoNumberGenerator();
 
-        LottoNumbers generatedLottoNumbers = generator.generate();
+        PurchasedLottoNumbers generatedLottoNumbers = generator.generate();
         List<Integer> generatedNumbers = generatedLottoNumbers.getNumbers();
 
         assertEquals(6, generatedNumbers.size());
@@ -163,7 +165,7 @@ public class LottoTest {
     public void test_generate_multiple_lotto() {
         LottoNumberGenerator generator = new LottoNumberGenerator();
 
-        List<LottoNumbers> generatedLottos = generator.generate(5);
+        List<PurchasedLottoNumbers> generatedLottos = generator.generate(5);
 
         assertEquals(5, generatedLottos.size());
     }
@@ -173,7 +175,7 @@ public class LottoTest {
     public void test_generate_zero_count() {
         LottoNumberGenerator generator = new LottoNumberGenerator();
 
-        List<LottoNumbers> generatedLottos = generator.generate(0);
+        List<PurchasedLottoNumbers> generatedLottos = generator.generate(0);
         assertEquals(0, generatedLottos.size());
     }
 

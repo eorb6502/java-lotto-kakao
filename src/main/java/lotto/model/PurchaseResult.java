@@ -3,7 +3,7 @@ package lotto.model;
 import java.util.List;
 
 public record PurchaseResult(
-    List<LottoNumbers> purchasedNumbers,
+    List<PurchasedLottoNumbers> purchasedNumbers,
     int manualCount,
     int autoCount
 ) {
@@ -19,7 +19,7 @@ public record PurchaseResult(
         }
     }
 
-    private void validatePurchasedNumbersSize(List<LottoNumbers> purchasedNumbers, int manualCount, int autoCount) {
+    private void validatePurchasedNumbersSize(List<PurchasedLottoNumbers> purchasedNumbers, int manualCount, int autoCount) {
         if (purchasedNumbers == null) {
             throw new IllegalArgumentException("구매한 로또 목록은 비어 있을 수 없습니다.");
         }

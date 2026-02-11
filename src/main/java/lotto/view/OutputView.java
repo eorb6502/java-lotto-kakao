@@ -1,7 +1,7 @@
 package lotto.view;
 
-import lotto.model.LottoNumbers;
 import lotto.model.LottoResult;
+import lotto.model.PurchasedLottoNumbers;
 import lotto.model.PurchaseResult;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public class OutputView {
 
     public void printPurchasedLottos(final PurchaseResult result) {
         System.out.println("수동으로 " + result.manualCount() + "장, 자동으로 " + result.autoCount() + "개를 구매했습니다.");
-        for (final LottoNumbers purchasedLotto : result.purchasedNumbers()) {
+        for (final PurchasedLottoNumbers purchasedLotto : result.purchasedNumbers()) {
             System.out.println(purchasedLotto.getNumbers());
         }
         System.out.println();
