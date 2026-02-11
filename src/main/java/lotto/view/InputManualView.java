@@ -1,6 +1,7 @@
 package lotto.view;
 
 import lotto.model.LottoNumbers;
+import lotto.model.ManualPurchaseCount;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Scanner;
 public class InputManualView {
     private static final String DIGITS_ONLY_REGEX = "\\d+";
     private static final String LOTTO_INPUT_REGEX = "^\\d+(?:\\s*,\\s*\\d+)*$";
-    private static final String LOTTO_NUMBER_DELIMITER = ",";
+    private static final String LOTTO_NUMBER_DELIMITER_REGEX = "\\s*,\\s*";
     private static final int LOTTO_NUMBER_COUNT = 6;
 
     private final Scanner scanner;
@@ -67,9 +68,7 @@ public class InputManualView {
     }
 
     private void validateManualCountRange(int manualCount, int maxCount) {
-        if (manualCount < 0 || manualCount > maxCount) {
-            throw new IllegalArgumentException("수동 구매 개수는 0 이상 구매 가능 개수 이하여야 합니다.");
-        }
+        ManualPurchaseCount.of(manualCount, maxCount);
     }
 
     private void validateLottoInputFormat(String lottoInput) {
@@ -79,7 +78,7 @@ public class InputManualView {
     }
 
     private List<Integer> parseLottoNumbers(String lottoInput) {
-        String[] tokens = lottoInput.split(LOTTO_NUMBER_DELIMITER);
+        String[] tokens = lottoInput.split(LOTTO_NUMBER_DELIMITER_REGEX);
         if (tokens.length != LOTTO_NUMBER_COUNT) {
             throw new IllegalArgumentException("로또 번호는 6개를 입력해야 합니다.");
         }

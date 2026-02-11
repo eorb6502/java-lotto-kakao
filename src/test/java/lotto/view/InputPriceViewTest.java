@@ -29,7 +29,7 @@ class InputPriceViewTest {
     void test_input_price_retries_on_invalid_input() {
         setInput("abc\n1000\n");
 
-        InputPriceView inputView = new InputPriceView(1000);
+        InputPriceView inputView = new InputPriceView();
         int price = inputView.inputPrice();
 
         assertEquals(1000, price);
@@ -40,7 +40,7 @@ class InputPriceViewTest {
     void test_input_price_minimum() {
         setInput("999\n1000\n");
 
-        InputPriceView inputView = new InputPriceView(1000);
+        InputPriceView inputView = new InputPriceView();
         int price = inputView.inputPrice();
 
         assertEquals(1000, price);
@@ -51,7 +51,7 @@ class InputPriceViewTest {
     void test_input_price_retries_when_less_than_1000() {
         setInput("0\n999\n1000\n");
 
-        InputPriceView inputView = new InputPriceView(1000);
+        InputPriceView inputView = new InputPriceView();
         int price = inputView.inputPrice();
 
         assertEquals(1000, price);

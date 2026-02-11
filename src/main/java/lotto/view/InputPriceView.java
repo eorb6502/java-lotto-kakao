@@ -1,15 +1,15 @@
 package lotto.view;
 
+import lotto.model.PurchaseAmount;
+
 import java.util.Scanner;
 
 public class InputPriceView {
     private static final String DIGITS_ONLY_REGEX = "\\d+";
 
-    private final int minPrice;
     private final Scanner scanner;
 
-    public InputPriceView(int minPrice) {
-        this.minPrice = minPrice;
+    public InputPriceView() {
         this.scanner = new Scanner(System.in);
     }
 
@@ -19,7 +19,7 @@ public class InputPriceView {
             String priceInput = scanner.nextLine();
             validateDigitsOnly(priceInput);
             int price = parsePrice(priceInput);
-            validateMinimumPrice(price);
+            validatePurchaseAmount(price);
             return price;
         } catch (IllegalArgumentException exception) {
             System.out.println(exception.getMessage());
@@ -41,9 +41,7 @@ public class InputPriceView {
         }
     }
 
-    private void validateMinimumPrice(int price) {
-        if (price < minPrice) {
-            throw new IllegalArgumentException("구입금액은 " + minPrice + "원 이상이어야 합니다.");
-        }
+    private void validatePurchaseAmount(int price) {
+        new PurchaseAmount(price);
     }
 }

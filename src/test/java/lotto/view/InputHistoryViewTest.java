@@ -84,4 +84,15 @@ class InputHistoryViewTest {
 
         assertEquals(List.of(1, 2, 3, 4, 5, 6), winningNumbers);
     }
+
+    @Test
+    @DisplayName("당첨 번호는 콤마+공백 형식도 허용한다")
+    void test_input_winning_numbers_accepts_comma_with_space() {
+        setInput("1, 2, 3, 4, 5, 6\n");
+
+        InputHistoryView inputView = new InputHistoryView();
+        List<Integer> winningNumbers = inputView.inputWinningNumbers();
+
+        assertEquals(List.of(1, 2, 3, 4, 5, 6), winningNumbers);
+    }
 }

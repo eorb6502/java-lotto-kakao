@@ -1,6 +1,7 @@
 package lotto.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,7 +37,7 @@ public class LottoNumbers {
         if (bonusNumber != null && set.contains(bonusNumber.value())) {
             throw new IllegalArgumentException("보너스 번호는 중복될 수 없습니다.");
         }
-        this.numbers = numbers;
+        this.numbers = sortNumbers(numbers);
         this.bonusNumber = bonusNumber;
     }
 
@@ -90,6 +91,12 @@ public class LottoNumbers {
             lottoNumbers.add(new LottoNumber(number));
         }
         return lottoNumbers;
+    }
+
+    private List<LottoNumber> sortNumbers(List<LottoNumber> numbers) {
+        List<LottoNumber> sortedNumbers = new ArrayList<>(numbers);
+        sortedNumbers.sort(Comparator.comparingInt(LottoNumber::value));
+        return List.copyOf(sortedNumbers);
     }
 
     public String toString() {

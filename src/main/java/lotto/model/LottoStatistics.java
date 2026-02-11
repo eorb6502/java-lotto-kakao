@@ -13,9 +13,10 @@ public record LottoStatistics(
     }
 
     public static LottoStatistics from(LottoNumbers winningNumber, List<LottoNumbers> purchasedNumbers, int purchasePrice) {
+        PurchaseAmount amount = new PurchaseAmount(purchasePrice);
         Map<LottoResult, Integer> resultCountByRank = countByRank(winningNumber, purchasedNumbers);
         long totalPrize = calculateTotalPrize(resultCountByRank);
-        double profitRate = (double) totalPrize / purchasePrice;
+        double profitRate = (double) totalPrize / amount.value();
         return new LottoStatistics(resultCountByRank, profitRate);
     }
 

@@ -69,6 +69,17 @@ class InputManualViewTest {
         assertEquals(List.of(1, 2, 3, 4, 5, 6), manualLottos.get(0).getNumbers());
     }
 
+    @Test
+    @DisplayName("수동 로또 번호는 콤마+공백 형식도 허용한다")
+    void test_input_manual_lottos_accepts_comma_with_space() {
+        setInput("1, 2, 3, 4, 5, 6\n");
+
+        InputManualView inputView = new InputManualView();
+        List<LottoNumbers> manualLottos = inputView.inputManualLottos(1);
+
+        assertEquals(List.of(1, 2, 3, 4, 5, 6), manualLottos.get(0).getNumbers());
+    }
+
     private void setInput(String data) {
         System.setIn(new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_8)));
     }
