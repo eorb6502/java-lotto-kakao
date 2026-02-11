@@ -1,0 +1,38 @@
+package lotto.model;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public record LottoStatistics(
+    Map<LottoResult, Integer> resultCountByRank,
+    double profitRate
+) {
+    public LottoStatistics {
+        resultCountByRank = Map.copyOf(resultCountByRank);
+    }
+
+    public static LottoStatistics from(LottoNumbers winningNumber, List<LottoNumbers> purchasedNumbers, int purchasePrice) {
+        Map<LottoResult, Integer> resultCountByRank = countByRank(winningNumber, purchasedNumbers);
+        long totalPrize = calculateTotalPrize(resultCountByRank);
+        double profitRate = (double) totalPrize / purchasePrice;
+        return new LottoStatistics(resultCountByRank, profitRate);
+    }
+
+    private static Map<LottoResult, Integer> countByRank(LottoNumbers winningNumber, List<LottoNumbers> purchasedNumbers) {
+        Map<LottoResult, Integer> resultCountByRank = new HashMap<>();
+        for (LottoNumbers numbers : purchasedNumbers) {
+            LottoResult result = winningNumber.compare(numbers);
+            resultCountByRank.merge(result, 1, Integer::sum);
+        }
+        return resultCountByRank;
+    }
+
+    private static long calculateTotalPrize(Map<LottoResult, Integer> resultCountByRank) {
+        long totalPrize = 0L;
+        for (Map.Entry<LottoResult, Integer> entry : resultCountByRank.entrySet()) {
+            totalPrize += entry.getKey().getPrize() * entry.getValue();
+        }
+        return totalPrize;
+    }
+}

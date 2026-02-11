@@ -2,17 +2,14 @@ package lotto.controller;
 
 import lotto.model.LottoNumberGenerator;
 import lotto.model.LottoNumbers;
-import lotto.model.LottoResult;
+import lotto.model.LottoStatistics;
 import lotto.model.PurchaseResult;
 import lotto.view.InputHistoryView;
 import lotto.view.InputPriceView;
 import lotto.view.InputManualView;
 import lotto.view.OutputView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class LottoController {
     private static final int LOTTO_PRICE = 1000;
@@ -49,9 +46,8 @@ public class LottoController {
         final LottoNumbers winningNumber = doInputWinningNumbers();
 
         // 통계 계산 및 출력
-        Map<LottoResult, Integer> rank = countByRank(winningNumber, purchaseResult.purchasedNumbers());
-        double profitRate = (double)calculateTotalPrize(rank) / price;
-        outputView.printStatistics(rank, profitRate);
+        LottoStatistics statistics = LottoStatistics.from(winningNumber, purchaseResult.purchasedNumbers(), price);
+        outputView.printStatistics(statistics.resultCountByRank(), statistics.profitRate());
     }
 
     private int doInputPrice() {
@@ -73,22 +69,5 @@ public class LottoController {
         List<Integer> numbers = inputHistoryView.inputWinningNumbers();
         int bonusNumber = inputHistoryView.inputBonusNumber(numbers);
         return new LottoNumbers(numbers, bonusNumber);
-    }
-
-    private Map<LottoResult, Integer> countByRank(LottoNumbers winningNumber, List<LottoNumbers> purchasedNumbers) {
-        Map<LottoResult, Integer> rank = new HashMap<>();
-        for (LottoNumbers numbers : purchasedNumbers) {
-            final LottoResult result = winningNumber.compare(numbers);
-            rank.merge(result, 1, Integer::sum);
-        }
-        return rank;
-    }
-
-    private long calculateTotalPrize(Map<LottoResult, Integer> rank) {
-        long totalPrize = 0L;
-        for (Map.Entry<LottoResult, Integer> entry : rank.entrySet()) {
-            totalPrize += entry.getKey().getPrize() * entry.getValue();
-        }
-        return totalPrize;
     }
 }
