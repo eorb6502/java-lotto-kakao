@@ -4,16 +4,15 @@ import lotto.model.LottoNumberGenerator;
 import lotto.model.LottoStatistics;
 import lotto.model.ManualPurchaseCount;
 import lotto.model.PurchaseAmount;
-import lotto.model.PurchasedLottoNumbers;
 import lotto.model.PurchaseResult;
 import lotto.model.WinningLottoNumbers;
+import lotto.service.LottoPurchaseService;
 import lotto.view.InputHistoryView;
 import lotto.view.InputPriceView;
 import lotto.view.InputManualView;
 import lotto.view.OutputView;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 public class LottoController {
     private final InputPriceView inputPriceView;
@@ -21,14 +20,15 @@ public class LottoController {
     private final InputHistoryView inputHistoryView;
     private final OutputView outputView;
 
-    private final LottoNumberGenerator lottoGenerator;
+    private final LottoPurchaseService lottoPurchaseService;
 
     public LottoController() {
         inputPriceView = new InputPriceView();
         inputManualView = new InputManualView();
         inputHistoryView = new InputHistoryView();
         outputView = new OutputView();
-        lottoGenerator = new LottoNumberGenerator();
+        LottoNumberGenerator lottoGenerator = new LottoNumberGenerator();
+        lottoPurchaseService = new LottoPurchaseService(lottoGenerator);
     }
 
     public void run() {
@@ -65,13 +65,13 @@ public class LottoController {
     }
 
     private PurchaseResult doPurchase(int manualCount, int autoCount) {
-        List<PurchasedLottoNumbers> manualNumbers = inputManualView.inputManualLottos(manualCount);
-        List<PurchasedLottoNumbers> autoNumbers = lottoGenerator.generate(autoCount);
-        List<PurchasedLottoNumbers> purchasedNumbers = Stream.concat(
-            manualNumbers.stream(),
-            autoNumbers.stream()
-        ).toList();
-        return new PurchaseResult(purchasedNumbers, manualCount, autoCount);
+        List<List<Integer>> manualLottoNumbers = inputManualView.inputManualLottos(manualCount);
+        try {
+            return lottoPurchaseService.purchase(manualLottoNumbers, autoCount);
+        } catch (IllegalArgumentException exception) {
+            System.out.println(exception.getMessage());
+        }
+        return doPurchase(manualCount, autoCount);
     }
 
     private WinningLottoNumbers doInputWinningNumbers() {

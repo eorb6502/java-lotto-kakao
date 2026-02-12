@@ -1,0 +1,35 @@
+package lotto.service;
+
+import lotto.model.LottoNumberGenerator;
+import lotto.model.PurchaseResult;
+import lotto.model.PurchasedLottoNumbers;
+
+import java.util.List;
+import java.util.stream.Stream;
+
+public class LottoPurchaseService {
+    private final LottoNumberGenerator lottoGenerator;
+
+    public LottoPurchaseService(LottoNumberGenerator lottoGenerator) {
+        this.lottoGenerator = lottoGenerator;
+    }
+
+    public PurchaseResult purchase(List<List<Integer>> manualLottoNumbers, int autoCount) {
+        validateManualLottoNumbers(manualLottoNumbers);
+        List<PurchasedLottoNumbers> manualNumbers = manualLottoNumbers.stream()
+            .map(PurchasedLottoNumbers::new)
+            .toList();
+        List<PurchasedLottoNumbers> autoNumbers = lottoGenerator.generate(autoCount);
+        List<PurchasedLottoNumbers> purchasedNumbers = Stream.concat(
+            manualNumbers.stream(),
+            autoNumbers.stream()
+        ).toList();
+        return new PurchaseResult(purchasedNumbers, manualNumbers.size(), autoCount);
+    }
+
+    private void validateManualLottoNumbers(List<List<Integer>> manualLottoNumbers) {
+        if (manualLottoNumbers == null) {
+            throw new IllegalArgumentException("수동 구매 번호 목록은 비어 있을 수 없습니다.");
+        }
+    }
+}
