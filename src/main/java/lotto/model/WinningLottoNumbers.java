@@ -24,7 +24,7 @@ public class WinningLottoNumbers {
     public LottoResult compare(PurchasedLottoNumbers purchasedNumbers) {
         int matchCount = numbers.countMatches(purchasedNumbers.numbers());
         boolean isBonusMatched = purchasedNumbers.numbers().contains(bonusNumber);
-        return determineResult(matchCount, isBonusMatched);
+        return LottoResult.from(matchCount, isBonusMatched);
     }
 
     public List<Integer> getNumbers() {
@@ -45,14 +45,5 @@ public class WinningLottoNumbers {
         if (numbers.contains(bonusNumber)) {
             throw new IllegalArgumentException("보너스 번호는 중복될 수 없습니다.");
         }
-    }
-
-    private LottoResult determineResult(int matchCount, boolean bonusMatched) {
-        if (matchCount == 6) return LottoResult.RANK_FIRST;
-        if (matchCount == 5 && bonusMatched) return LottoResult.RANK_SECOND;
-        if (matchCount == 5) return LottoResult.RANK_THIRD;
-        if (matchCount == 4) return LottoResult.RANK_FOURTH;
-        if (matchCount == 3) return LottoResult.RANK_FIFTH;
-        return LottoResult.RANK_NONE;
     }
 }

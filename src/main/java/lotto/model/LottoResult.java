@@ -17,4 +17,13 @@ public enum LottoResult {
     public long getPrize() {
         return prize;
     }
+
+    public static LottoResult from(int matchCount, boolean bonusMatched) {
+        if (matchCount == 6) return LottoResult.RANK_FIRST;
+        if (matchCount == 5 && bonusMatched) return LottoResult.RANK_SECOND;
+        if (matchCount == 5) return LottoResult.RANK_THIRD;
+        if (matchCount == 4) return LottoResult.RANK_FOURTH;
+        if (matchCount == 3) return LottoResult.RANK_FIFTH;
+        return LottoResult.RANK_NONE;
+    }
 }
