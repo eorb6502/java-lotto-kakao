@@ -22,7 +22,7 @@ class LottoStatisticsTest {
             new PurchasedLottoNumbers(List.of(8, 9, 10, 11, 12, 13))
         );
 
-        LottoStatistics statistics = LottoStatistics.from(winningNumber, purchasedNumbers, 6000);
+        LottoStatistics statistics = LottoStatistics.from(winningNumber, purchasedNumbers, new PurchaseAmount(6000));
 
         assertEquals(1, statistics.resultCountByRank().getOrDefault(LottoResult.RANK_FIRST, 0));
         assertEquals(1, statistics.resultCountByRank().getOrDefault(LottoResult.RANK_SECOND, 0));

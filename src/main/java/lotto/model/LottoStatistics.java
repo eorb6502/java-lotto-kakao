@@ -12,11 +12,10 @@ public record LottoStatistics(
         resultCountByRank = Map.copyOf(resultCountByRank);
     }
 
-    public static LottoStatistics from(WinningLottoNumbers winningNumber, List<PurchasedLottoNumbers> purchasedNumbers, int purchasePrice) {
-        PurchaseAmount amount = new PurchaseAmount(purchasePrice);
+    public static LottoStatistics from(WinningLottoNumbers winningNumber, List<PurchasedLottoNumbers> purchasedNumbers, PurchaseAmount purchaseAmount) {
         Map<LottoResult, Integer> resultCountByRank = countByRank(winningNumber, purchasedNumbers);
         long totalPrize = calculateTotalPrize(resultCountByRank);
-        double profitRate = (double) totalPrize / amount.value();
+        double profitRate = (double) totalPrize / purchaseAmount.value();
         return new LottoStatistics(resultCountByRank, profitRate);
     }
 

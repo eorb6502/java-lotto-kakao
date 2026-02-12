@@ -51,7 +51,7 @@ public class LottoController {
         LottoStatistics statistics = LottoStatistics.from(
             winningNumber,
             purchaseResult.purchasedNumbers(),
-            purchaseAmount.value()
+            purchaseAmount
         );
         outputView.printStatistics(statistics.resultCountByRank(), statistics.profitRate());
     }
