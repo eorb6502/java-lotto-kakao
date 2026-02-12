@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Random;
 
 public class LottoNumberGenerator {
-    private static final int LOTTO_SIZE = 6;
-
     private final Random random;
 
     public LottoNumberGenerator() {
@@ -27,7 +25,7 @@ public class LottoNumberGenerator {
         Collections.shuffle(candidates, random);
 
         // 랜덤한 리스트의 앞 6개 숫자를 추출하고 정렬
-        List<Integer> generated = new ArrayList<>(candidates.subList(0, LOTTO_SIZE));
+        List<Integer> generated = new ArrayList<>(candidates.subList(0, LottoNumbers.getLottoSize()));
         Collections.sort(generated);
         return new PurchasedLottoNumbers(generated);
     }

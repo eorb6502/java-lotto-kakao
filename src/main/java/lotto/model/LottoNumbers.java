@@ -18,6 +18,10 @@ public class LottoNumbers {
         this.numbers = sortNumbers(convertedNumbers);
     }
 
+    public static int getLottoSize() {
+        return LOTTO_SIZE;
+    }
+
     private void validateSize(List<LottoNumber> numbers) {
         if (numbers.size() != LOTTO_SIZE) {
             throw new IllegalArgumentException("로또 번호는 6개의 숫자이어야 합니다.");
