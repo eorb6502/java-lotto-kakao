@@ -13,6 +13,7 @@ import lotto.view.InputManualView;
 import lotto.view.OutputView;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class LottoController {
     private final InputPriceView inputPriceView;
@@ -64,9 +65,12 @@ public class LottoController {
     }
 
     private PurchaseResult doPurchase(int manualCount, int autoCount) {
-        List<PurchasedLottoNumbers> purchasedNumbers = inputManualView.inputManualLottos(manualCount);
+        List<PurchasedLottoNumbers> manualNumbers = inputManualView.inputManualLottos(manualCount);
         List<PurchasedLottoNumbers> autoNumbers = lottoGenerator.generate(autoCount);
-        purchasedNumbers.addAll(autoNumbers);
+        List<PurchasedLottoNumbers> purchasedNumbers = Stream.concat(
+            manualNumbers.stream(),
+            autoNumbers.stream()
+        ).toList();
         return new PurchaseResult(purchasedNumbers, manualCount, autoCount);
     }
 
