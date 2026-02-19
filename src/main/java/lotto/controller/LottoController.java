@@ -69,7 +69,7 @@ public class LottoController {
 
     private PurchaseResult doPurchase(int manualCount, int autoCount) {
         while (true) {
-            List<List<Integer>> manualLottoNumbers = inputManualView.inputManualLottos(manualCount);
+            List<LottoNumbers> manualLottoNumbers = inputManualView.inputManualLottos(manualCount);
             try {
                 return lottoPurchaseService.purchase(manualLottoNumbers, autoCount);
             } catch (IllegalArgumentException exception) {

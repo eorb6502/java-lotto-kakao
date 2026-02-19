@@ -38,8 +38,8 @@ public class InputManualView {
         }
     }
 
-    public List<List<Integer>> inputManualLottos(int manualCount) {
-        List<List<Integer>> manualLottos = new ArrayList<>();
+    public List<LottoNumbers> inputManualLottos(int manualCount) {
+        List<LottoNumbers> manualLottos = new ArrayList<>();
         if (manualCount == 0) {
             return manualLottos;
         }
@@ -50,7 +50,7 @@ public class InputManualView {
         return manualLottos;
     }
 
-    private List<Integer> inputSingleLotto() {
+    private LottoNumbers inputSingleLotto() {
         while (true) {
             try {
                 String lottoInput = scanner.nextLine();
@@ -89,7 +89,7 @@ public class InputManualView {
         }
     }
 
-    private List<Integer> parseLottoNumbers(String lottoInput) {
+    private LottoNumbers parseLottoNumbers(String lottoInput) {
         String[] tokens = lottoInput.split(LOTTO_NUMBER_DELIMITER_REGEX);
         if (tokens.length != LOTTO_NUMBER_COUNT) {
             throw new IllegalArgumentException("로또 번호는 6개를 입력해야 합니다.");
@@ -99,6 +99,6 @@ public class InputManualView {
         for (String token : tokens) {
             numbers.add(Integer.parseInt(token.trim()));
         }
-        return new LottoNumbers(numbers).getNumbers();
+        return new LottoNumbers(numbers);
     }
 }

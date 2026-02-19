@@ -1,5 +1,6 @@
 package lotto.view;
 
+import lotto.model.LottoNumbers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -52,7 +53,7 @@ class InputManualViewTest {
     @DisplayName("수동 구매 개수가 0이면 빈 목록 반환")
     void test_input_manual_lottos_zero() {
         InputManualView inputView = new InputManualView();
-        List<List<Integer>> manualLottos = inputView.inputManualLottos(0);
+        List<LottoNumbers> manualLottos = inputView.inputManualLottos(0);
 
         assertEquals(0, manualLottos.size());
     }
@@ -63,10 +64,10 @@ class InputManualViewTest {
         setInput("1,2,3,4,5\n1,2,3,4,5,6\n");
 
         InputManualView inputView = new InputManualView();
-        List<List<Integer>> manualLottos = inputView.inputManualLottos(1);
+        List<LottoNumbers> manualLottos = inputView.inputManualLottos(1);
 
         assertEquals(1, manualLottos.size());
-        assertEquals(List.of(1, 2, 3, 4, 5, 6), manualLottos.get(0));
+        assertEquals(List.of(1, 2, 3, 4, 5, 6), manualLottos.get(0).getNumbers());
     }
 
     @Test
@@ -75,9 +76,9 @@ class InputManualViewTest {
         setInput("1, 2, 3, 4, 5, 6\n");
 
         InputManualView inputView = new InputManualView();
-        List<List<Integer>> manualLottos = inputView.inputManualLottos(1);
+        List<LottoNumbers> manualLottos = inputView.inputManualLottos(1);
 
-        assertEquals(List.of(1, 2, 3, 4, 5, 6), manualLottos.get(0));
+        assertEquals(List.of(1, 2, 3, 4, 5, 6), manualLottos.get(0).getNumbers());
     }
 
     @Test
@@ -86,9 +87,9 @@ class InputManualViewTest {
         setInput("1,1,2,3,4,5\n1,2,3,4,5,6\n");
 
         InputManualView inputView = new InputManualView();
-        List<List<Integer>> manualLottos = inputView.inputManualLottos(1);
+        List<LottoNumbers> manualLottos = inputView.inputManualLottos(1);
 
-        assertEquals(List.of(1, 2, 3, 4, 5, 6), manualLottos.get(0));
+        assertEquals(List.of(1, 2, 3, 4, 5, 6), manualLottos.get(0).getNumbers());
     }
 
     @Test

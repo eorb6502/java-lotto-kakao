@@ -1,6 +1,7 @@
 package lotto.service;
 
 import lotto.model.LottoNumberGenerator;
+import lotto.model.LottoNumbers;
 import lotto.model.PurchaseResult;
 import lotto.model.PurchasedLottoNumbers;
 
@@ -15,7 +16,7 @@ public class LottoPurchaseService {
         this.lottoGenerator = lottoGenerator;
     }
 
-    public PurchaseResult purchase(List<List<Integer>> manualLottoNumbers, int autoCount) {
+    public PurchaseResult purchase(List<LottoNumbers> manualLottoNumbers, int autoCount) {
         validateManualLottoNumbers(manualLottoNumbers);
         List<PurchasedLottoNumbers> manualNumbers = manualLottoNumbers.stream()
             .map(PurchasedLottoNumbers::new)
@@ -28,11 +29,11 @@ public class LottoPurchaseService {
         return new PurchaseResult(purchasedNumbers, manualNumbers.size(), autoCount);
     }
 
-    private void validateManualLottoNumbers(List<List<Integer>> manualLottoNumbers) {
+    private void validateManualLottoNumbers(List<LottoNumbers> manualLottoNumbers) {
         if (manualLottoNumbers == null) {
             throw new IllegalArgumentException("수동 구매 번호 목록은 비어 있을 수 없습니다.");
         }
-        for (List<Integer> manualLottoNumber : manualLottoNumbers) {
+        for (LottoNumbers manualLottoNumber : manualLottoNumbers) {
             if (manualLottoNumber == null) {
                 throw new IllegalArgumentException("수동 구매 번호에는 null이 포함될 수 없습니다.");
             }

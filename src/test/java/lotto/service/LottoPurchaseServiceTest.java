@@ -1,12 +1,12 @@
 package lotto.service;
 
 import lotto.model.LottoNumberGenerator;
+import lotto.model.LottoNumbers;
 import lotto.model.PurchaseResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,9 +18,9 @@ class LottoPurchaseServiceTest {
     @DisplayName("수동과 자동 로또를 함께 구매한다")
     void test_purchase_manual_and_auto() {
         LottoPurchaseService service = new LottoPurchaseService(new LottoNumberGenerator(1L));
-        List<List<Integer>> manualLottoNumbers = List.of(
-            List.of(1, 2, 3, 4, 5, 6),
-            List.of(7, 8, 9, 10, 11, 12)
+        List<LottoNumbers> manualLottoNumbers = List.of(
+            new LottoNumbers(List.of(1, 2, 3, 4, 5, 6)),
+            new LottoNumbers(List.of(7, 8, 9, 10, 11, 12))
         );
 
         PurchaseResult result = service.purchase(manualLottoNumbers, 1);
@@ -44,17 +44,8 @@ class LottoPurchaseServiceTest {
     @DisplayName("수동 번호 목록에 null 로또가 포함되면 예외가 발생한다")
     void test_purchase_manual_lotto_numbers_contains_null_lotto() {
         LottoPurchaseService service = new LottoPurchaseService(new LottoNumberGenerator(1L));
-        List<List<Integer>> manualLottoNumbers = new ArrayList<>();
+        List<LottoNumbers> manualLottoNumbers = new ArrayList<>();
         manualLottoNumbers.add(null);
-
-        assertThrows(IllegalArgumentException.class, () -> service.purchase(manualLottoNumbers, 1));
-    }
-
-    @Test
-    @DisplayName("수동 번호에 null 숫자가 포함되면 예외가 발생한다")
-    void test_purchase_manual_lotto_numbers_contains_null_number() {
-        LottoPurchaseService service = new LottoPurchaseService(new LottoNumberGenerator(1L));
-        List<List<Integer>> manualLottoNumbers = List.of(Arrays.asList(1, 2, 3, 4, 5, null));
 
         assertThrows(IllegalArgumentException.class, () -> service.purchase(manualLottoNumbers, 1));
     }
