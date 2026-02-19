@@ -69,7 +69,7 @@ public class LottoController {
         try {
             return lottoPurchaseService.purchase(manualLottoNumbers, autoCount);
         } catch (IllegalArgumentException exception) {
-            System.out.println(exception.getMessage());
+            outputView.printString(exception.getMessage());
         }
         return doPurchase(manualCount, autoCount);
     }
@@ -80,7 +80,7 @@ public class LottoController {
         try {
             return new WinningLottoNumbers(numbers, bonusNumber);
         } catch (IllegalArgumentException exception) {
-            System.out.println(exception.getMessage());
+            outputView.printString(exception.getMessage());
         }
         return doInputWinningNumbers();
     }
