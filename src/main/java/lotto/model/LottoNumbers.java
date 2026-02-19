@@ -44,10 +44,8 @@ public class LottoNumbers {
     }
 
     public int countMatches(LottoNumbers other) {
-        final List<Integer> otherNumbers = other.getNumbers();
         return (int) numbers.stream()
-            .map(LottoNumber::value)
-            .filter(otherNumbers::contains)
+            .filter(other::contains)
             .count();
     }
 
