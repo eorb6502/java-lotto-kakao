@@ -1,10 +1,6 @@
 package lotto.model;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class LottoNumbers {
     private static final int LOTTO_SIZE = 6;
@@ -14,7 +10,8 @@ public class LottoNumbers {
     public LottoNumbers(List<Integer> numbers) {
         List<LottoNumber> convertedNumbers = convertNumbers(numbers);
         validateSize(convertedNumbers);
-        validateDistinct(convertedNumbers);
+        Set<LottoNumber> numberSet = new HashSet<>(convertedNumbers);
+        validateDistinct(numberSet);
         this.numbers = sortNumbers(convertedNumbers);
     }
 
@@ -28,8 +25,7 @@ public class LottoNumbers {
         }
     }
 
-    private void validateDistinct(List<LottoNumber> numbers) {
-        final Set<LottoNumber> set = new HashSet<>(numbers);
+    private void validateDistinct(Set<LottoNumber> set) {
         if (set.size() != LOTTO_SIZE) {
             throw new IllegalArgumentException("로또 번호는 중복될 수 없습니다.");
         }
@@ -60,6 +56,7 @@ public class LottoNumbers {
         for (Integer number : numbers) {
             lottoNumbers.add(new LottoNumber(number));
         }
+
         return lottoNumbers;
     }
 
