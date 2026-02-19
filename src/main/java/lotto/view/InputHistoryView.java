@@ -18,11 +18,11 @@ public class InputHistoryView {
         this.scanner = new Scanner(System.in);
     }
 
-    public List<Integer> inputWinningNumbers() {
+    public LottoNumbers inputWinningNumbers() {
         try {
             System.out.println("지난 주 당첨 번호를 입력해 주세요.");
             String[] winningNumbers = scanner.nextLine().split(LOTTO_NUMBER_DELIMITER_REGEX);
-            return new LottoNumbers(parseWinningNumbers(winningNumbers)).getNumbers();
+            return new LottoNumbers(parseWinningNumbers(winningNumbers));
         } catch (IllegalArgumentException exception) {
             System.out.println(exception.getMessage());
             return inputWinningNumbers();

@@ -1,5 +1,6 @@
 package lotto.view;
 
+import lotto.model.LottoNumbers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,9 +37,9 @@ class InputHistoryViewTest {
         setInput("1,2,3,4,5\n1,2,3,4,5,6\n");
 
         InputHistoryView inputView = new InputHistoryView();
-        List<Integer> winningNumbers = inputView.inputWinningNumbers();
+        LottoNumbers winningNumbers = inputView.inputWinningNumbers();
 
-        assertEquals(List.of(1, 2, 3, 4, 5, 6), winningNumbers);
+        assertEquals(List.of(1, 2, 3, 4, 5, 6), winningNumbers.getNumbers());
     }
 
     @Test
@@ -69,9 +70,9 @@ class InputHistoryViewTest {
         setInput("1,2,3,4,5,46\n1,2,3,4,5,6\n");
 
         InputHistoryView inputView = new InputHistoryView();
-        List<Integer> winningNumbers = inputView.inputWinningNumbers();
+        LottoNumbers winningNumbers = inputView.inputWinningNumbers();
 
-        assertEquals(List.of(1, 2, 3, 4, 5, 6), winningNumbers);
+        assertEquals(List.of(1, 2, 3, 4, 5, 6), winningNumbers.getNumbers());
     }
 
     @Test
@@ -80,9 +81,9 @@ class InputHistoryViewTest {
         setInput("1,2,3,4,5,5\n1,2,3,4,5,6\n");
 
         InputHistoryView inputView = new InputHistoryView();
-        List<Integer> winningNumbers = inputView.inputWinningNumbers();
+        LottoNumbers winningNumbers = inputView.inputWinningNumbers();
 
-        assertEquals(List.of(1, 2, 3, 4, 5, 6), winningNumbers);
+        assertEquals(List.of(1, 2, 3, 4, 5, 6), winningNumbers.getNumbers());
     }
 
     @Test
@@ -91,8 +92,8 @@ class InputHistoryViewTest {
         setInput("1, 2, 3, 4, 5, 6\n");
 
         InputHistoryView inputView = new InputHistoryView();
-        List<Integer> winningNumbers = inputView.inputWinningNumbers();
+        LottoNumbers winningNumbers = inputView.inputWinningNumbers();
 
-        assertEquals(List.of(1, 2, 3, 4, 5, 6), winningNumbers);
+        assertEquals(List.of(1, 2, 3, 4, 5, 6), winningNumbers.getNumbers());
     }
 }

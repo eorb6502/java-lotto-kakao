@@ -1,6 +1,7 @@
 package lotto.controller;
 
 import lotto.model.LottoNumberGenerator;
+import lotto.model.LottoNumbers;
 import lotto.model.LottoStatistics;
 import lotto.model.ManualPurchaseCount;
 import lotto.model.PurchaseAmount;
@@ -75,7 +76,7 @@ public class LottoController {
     }
 
     private WinningLottoNumbers doInputWinningNumbers() {
-        List<Integer> numbers = inputHistoryView.inputWinningNumbers();
+        LottoNumbers numbers = inputHistoryView.inputWinningNumbers();
         int bonusNumber = inputHistoryView.inputBonusNumber();
         try {
             return new WinningLottoNumbers(numbers, bonusNumber);
