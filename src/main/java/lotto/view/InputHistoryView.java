@@ -15,27 +15,40 @@ public class InputHistoryView {
     private final Scanner scanner;
 
     public InputHistoryView() {
-        this.scanner = new Scanner(System.in);
+        this(new Scanner(System.in));
+    }
+
+    public InputHistoryView(Scanner scanner) {
+        validateScanner(scanner);
+        this.scanner = scanner;
     }
 
     public LottoNumbers inputWinningNumbers() {
-        try {
-            System.out.println("지난 주 당첨 번호를 입력해 주세요.");
-            String[] winningNumbers = scanner.nextLine().split(LOTTO_NUMBER_DELIMITER_REGEX);
-            return new LottoNumbers(parseWinningNumbers(winningNumbers));
-        } catch (IllegalArgumentException exception) {
-            System.out.println(exception.getMessage());
-            return inputWinningNumbers();
+        while (true) {
+            try {
+                System.out.println("지난 주 당첨 번호를 입력해 주세요.");
+                String[] winningNumbers = scanner.nextLine().split(LOTTO_NUMBER_DELIMITER_REGEX);
+                return new LottoNumbers(parseWinningNumbers(winningNumbers));
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
+            }
         }
     }
 
     public int inputBonusNumber() {
-        try {
-            System.out.println("보너스 볼을 입력해 주세요.");
-            return parseBonusNumber(scanner.nextLine());
-        } catch (IllegalArgumentException exception) {
-            System.out.println(exception.getMessage());
-            return inputBonusNumber();
+        while (true) {
+            try {
+                System.out.println("보너스 볼을 입력해 주세요.");
+                return parseBonusNumber(scanner.nextLine());
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
+            }
+        }
+    }
+
+    private void validateScanner(Scanner scanner) {
+        if (scanner == null) {
+            throw new IllegalArgumentException("입력 스캐너는 비어 있을 수 없습니다.");
         }
     }
 

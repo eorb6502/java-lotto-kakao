@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class InputManualViewTest {
     private InputStream originalIn;
@@ -88,6 +89,12 @@ class InputManualViewTest {
         List<List<Integer>> manualLottos = inputView.inputManualLottos(1);
 
         assertEquals(List.of(1, 2, 3, 4, 5, 6), manualLottos.get(0));
+    }
+
+    @Test
+    @DisplayName("입력 스캐너가 null이면 예외가 발생한다")
+    void test_constructor_null_scanner() {
+        assertThrows(IllegalArgumentException.class, () -> new InputManualView(null));
     }
 
     private void setInput(String data) {

@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class InputPriceViewTest {
     private InputStream originalIn;
@@ -55,6 +56,12 @@ class InputPriceViewTest {
         int price = inputView.inputPrice();
 
         assertEquals(1000, price);
+    }
+
+    @Test
+    @DisplayName("입력 스캐너가 null이면 예외가 발생한다")
+    void test_constructor_null_scanner() {
+        assertThrows(IllegalArgumentException.class, () -> new InputPriceView(null));
     }
 
     private void setInput(String data) {

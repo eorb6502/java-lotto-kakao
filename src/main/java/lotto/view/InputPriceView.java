@@ -10,21 +10,33 @@ public class InputPriceView {
     private final Scanner scanner;
 
     public InputPriceView() {
-        this.scanner = new Scanner(System.in);
+        this(new Scanner(System.in));
+    }
+
+    public InputPriceView(Scanner scanner) {
+        validateScanner(scanner);
+        this.scanner = scanner;
     }
 
     public int inputPrice() {
-        System.out.println("구입금액을 입력해 주세요.");
-        try {
-            String priceInput = scanner.nextLine();
-            validateDigitsOnly(priceInput);
-            int price = parsePrice(priceInput);
-            validatePurchaseAmount(price);
-            return price;
-        } catch (IllegalArgumentException exception) {
-            System.out.println(exception.getMessage());
+        while (true) {
+            System.out.println("구입금액을 입력해 주세요.");
+            try {
+                String priceInput = scanner.nextLine();
+                validateDigitsOnly(priceInput);
+                int price = parsePrice(priceInput);
+                validatePurchaseAmount(price);
+                return price;
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
+            }
         }
-        return inputPrice();
+    }
+
+    private void validateScanner(Scanner scanner) {
+        if (scanner == null) {
+            throw new IllegalArgumentException("입력 스캐너는 비어 있을 수 없습니다.");
+        }
     }
 
     private void validateDigitsOnly(String priceInput) {

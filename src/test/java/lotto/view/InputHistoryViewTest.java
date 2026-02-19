@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class InputHistoryViewTest {
     private InputStream originalIn;
@@ -95,5 +96,11 @@ class InputHistoryViewTest {
         LottoNumbers winningNumbers = inputView.inputWinningNumbers();
 
         assertEquals(List.of(1, 2, 3, 4, 5, 6), winningNumbers.getNumbers());
+    }
+
+    @Test
+    @DisplayName("입력 스캐너가 null이면 예외가 발생한다")
+    void test_constructor_null_scanner() {
+        assertThrows(IllegalArgumentException.class, () -> new InputHistoryView(null));
     }
 }

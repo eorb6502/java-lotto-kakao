@@ -16,20 +16,26 @@ public class InputManualView {
     private final Scanner scanner;
 
     public InputManualView() {
-        this.scanner = new Scanner(System.in);
+        this(new Scanner(System.in));
+    }
+
+    public InputManualView(Scanner scanner) {
+        validateScanner(scanner);
+        this.scanner = scanner;
     }
 
     public int inputManualCount(int maxCount) {
-        System.out.println("수동으로 구매할 로또 수를 입력해 주세요.");
-        try {
-            String countInput = scanner.nextLine();
-            int manualCount = validateAndParseCount(countInput);
-            validateManualCountRange(manualCount, maxCount);
-            return manualCount;
-        } catch (IllegalArgumentException exception) {
-            System.out.println(exception.getMessage());
+        while (true) {
+            System.out.println("수동으로 구매할 로또 수를 입력해 주세요.");
+            try {
+                String countInput = scanner.nextLine();
+                int manualCount = validateAndParseCount(countInput);
+                validateManualCountRange(manualCount, maxCount);
+                return manualCount;
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
+            }
         }
-        return inputManualCount(maxCount);
     }
 
     public List<List<Integer>> inputManualLottos(int manualCount) {
@@ -45,14 +51,21 @@ public class InputManualView {
     }
 
     private List<Integer> inputSingleLotto() {
-        try {
-            String lottoInput = scanner.nextLine();
-            validateLottoInputFormat(lottoInput);
-            return parseLottoNumbers(lottoInput);
-        } catch (IllegalArgumentException exception) {
-            System.out.println(exception.getMessage());
+        while (true) {
+            try {
+                String lottoInput = scanner.nextLine();
+                validateLottoInputFormat(lottoInput);
+                return parseLottoNumbers(lottoInput);
+            } catch (IllegalArgumentException exception) {
+                System.out.println(exception.getMessage());
+            }
         }
-        return inputSingleLotto();
+    }
+
+    private void validateScanner(Scanner scanner) {
+        if (scanner == null) {
+            throw new IllegalArgumentException("입력 스캐너는 비어 있을 수 없습니다.");
+        }
     }
 
     private int validateAndParseCount(String input) {

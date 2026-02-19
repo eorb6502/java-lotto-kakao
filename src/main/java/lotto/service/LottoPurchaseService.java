@@ -11,6 +11,7 @@ public class LottoPurchaseService {
     private final LottoNumberGenerator lottoGenerator;
 
     public LottoPurchaseService(LottoNumberGenerator lottoGenerator) {
+        validateLottoGenerator(lottoGenerator);
         this.lottoGenerator = lottoGenerator;
     }
 
@@ -30,6 +31,17 @@ public class LottoPurchaseService {
     private void validateManualLottoNumbers(List<List<Integer>> manualLottoNumbers) {
         if (manualLottoNumbers == null) {
             throw new IllegalArgumentException("수동 구매 번호 목록은 비어 있을 수 없습니다.");
+        }
+        for (List<Integer> manualLottoNumber : manualLottoNumbers) {
+            if (manualLottoNumber == null) {
+                throw new IllegalArgumentException("수동 구매 번호에는 null이 포함될 수 없습니다.");
+            }
+        }
+    }
+
+    private void validateLottoGenerator(LottoNumberGenerator lottoGenerator) {
+        if (lottoGenerator == null) {
+            throw new IllegalArgumentException("로또 번호 생성기는 비어 있을 수 없습니다.");
         }
     }
 }

@@ -14,6 +14,7 @@ import lotto.view.InputManualView;
 import lotto.view.OutputView;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class LottoController {
     private final InputPriceView inputPriceView;
@@ -24,9 +25,10 @@ public class LottoController {
     private final LottoPurchaseService lottoPurchaseService;
 
     public LottoController() {
-        inputPriceView = new InputPriceView();
-        inputManualView = new InputManualView();
-        inputHistoryView = new InputHistoryView();
+        Scanner scanner = new Scanner(System.in);
+        inputPriceView = new InputPriceView(scanner);
+        inputManualView = new InputManualView(scanner);
+        inputHistoryView = new InputHistoryView(scanner);
         outputView = new OutputView();
         LottoNumberGenerator lottoGenerator = new LottoNumberGenerator();
         lottoPurchaseService = new LottoPurchaseService(lottoGenerator);
@@ -66,23 +68,25 @@ public class LottoController {
     }
 
     private PurchaseResult doPurchase(int manualCount, int autoCount) {
-        List<List<Integer>> manualLottoNumbers = inputManualView.inputManualLottos(manualCount);
-        try {
-            return lottoPurchaseService.purchase(manualLottoNumbers, autoCount);
-        } catch (IllegalArgumentException exception) {
-            outputView.printString(exception.getMessage());
+        while (true) {
+            List<List<Integer>> manualLottoNumbers = inputManualView.inputManualLottos(manualCount);
+            try {
+                return lottoPurchaseService.purchase(manualLottoNumbers, autoCount);
+            } catch (IllegalArgumentException exception) {
+                outputView.printString(exception.getMessage());
+            }
         }
-        return doPurchase(manualCount, autoCount);
     }
 
     private WinningLottoNumbers doInputWinningNumbers() {
-        LottoNumbers numbers = inputHistoryView.inputWinningNumbers();
-        int bonusNumber = inputHistoryView.inputBonusNumber();
-        try {
-            return new WinningLottoNumbers(numbers, bonusNumber);
-        } catch (IllegalArgumentException exception) {
-            outputView.printString(exception.getMessage());
+        while (true) {
+            LottoNumbers numbers = inputHistoryView.inputWinningNumbers();
+            int bonusNumber = inputHistoryView.inputBonusNumber();
+            try {
+                return new WinningLottoNumbers(numbers, bonusNumber);
+            } catch (IllegalArgumentException exception) {
+                outputView.printString(exception.getMessage());
+            }
         }
-        return doInputWinningNumbers();
     }
 }
